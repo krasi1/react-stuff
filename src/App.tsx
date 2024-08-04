@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Canvas } from "@react-three/fiber";
+import React from "react";
+import { Link } from "react-router-dom";
+import "./App.css";
+import Box from "./Box";
+import Home from "./Home";
+import Navbar from "./Navbar";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar>
+        <Home />
+        <Link to="/about">2</Link>
+        <Link to="/contact">3</Link>
+      </Navbar>
+
+      <div className="canvas-container">
+        <Canvas className="canvas">
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.15}
+            decay={0}
+            intensity={Math.PI}
+          />
+          <Box position={[0, 0, 0]} />
+        </Canvas>
+      </div>
+    </>
   );
 }
 
