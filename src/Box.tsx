@@ -1,31 +1,41 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
+import * as THREE from "three";
+import { Mesh } from "three";
 
-export default function Box(props: any) {
-  // This reference gives us direct access to the THREE.Mesh object
-  const ref = useRef();
-  // Hold state for hovered and clicked events
+const geom = [new THREE.BoxGeometry(), new THREE.SphereGeometry(0.785398)];
+
+export default function Box({
+  position,
+  rotation,
+}: {
+  position: any;
+  rotation: any;
+}) {
+  const ref = useRef<Mesh>();
+  const [count, setCount] = useState(0);
+
   const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false);
-  // Subscribe this component to the render-loop, rotate the mesh every frame
+
   useFrame((state, delta) => {
-    //@ts-ignore
-    ref.current.rotation.x += delta;
-    //@ts-ignore
-    ref.current.rotation.y += delta;
+    if (ref.current) {
+      ref.current.rotation.x += delta;
+      ref.current.rotation.y += delta;
+    }
   });
-  // Return the view, these are regular Threejs elements expressed in JSX
   return (
     <mesh
-      {...props}
+      position={position}
+      rotation={rotation}
+      //@ts-expect-error
       ref={ref}
-      scale={clicked ? 1.5 : 1}
-      onClick={(event) => click(!clicked)}
+      scale={1}
+      onClick={()=>setCount((count + 1) % 2)}
       onPointerOver={(event) => hover(true)}
       onPointerOut={(event) => hover(false)}
+      geometry={geom[count]}
     >
-      <boxGeometry args={[2 , 2, 2]} />
-      <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
+      <meshStandardMaterial color={hovered ? "hotpink" : "purple"} />
     </mesh>
   );
 }
